@@ -131,11 +131,11 @@ def playing(chat_id):
     while str(number_play) in used:
         pic, answer, out, number_play = create_random()
         if str(number_play) not in used:
-            bot.send_message(chat_id, answer, parse_mode='HTML')
+            #bot.send_message(chat_id, answer, parse_mode='HTML')
             break
         else:
             continue
-        bot.send_message(chat_id, answer, parse_mode='HTML')
+        #bot.send_message(chat_id, answer, parse_mode='HTML')
 
     count+=1
     
@@ -179,7 +179,7 @@ def printed(call1):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('t'))
 def key_call(call):
-    bot.answer_callback_query(callback_query_id=call.id, text='Ответ принят')
+    #bot.answer_callback_query(callback_query_id=call.id, text='Ответ принят')
     #bot.send_message(call.message.chat.id, f"{answer}, {call.data[1:]}", parse_mode='HTML',reply_markup=keyboard1())
     if int(call.data[1:]) == int(answer):
         with open('res.txt', 'r') as file:
