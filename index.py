@@ -104,10 +104,10 @@ def game_ended(chat_id):
     bot.send_message(chat_id, f"Игра завершена. Ваш результат: {res}/10", parse_mode='HTML',reply_markup=keyboard())
     if res==10:
         text='*Блестящая работа, капитан! Так держать!*'
-    if res<=9 and res>=6:
-        text='*Неплохо, но и не хорошо*'
-    if res<=5:
-        text='*Ты куда смотришь, двоечник??*'
+    if res<=9 and res>=7:
+        text='*Неплохо, но и не хорошо. Учиться, учиться и еще раз учиться!*'
+    if res<=6:
+        text='*Ты куда смотришь, двоечник?? Марш на пересдачу!*'
 
 
     bot.send_message(chat_id, text, parse_mode='Markdown',reply_markup=keyboard())
