@@ -9,14 +9,17 @@ bot = telebot.TeleBot('1736780989:AAHppwjEPVMt-X4icSQOsm-zxxGOkcQyvUE')
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-
-    with open('ded.txt', 'r') as file:
-    	count=int(file.read())
-    	file.close()
-    count=0
+    with open('res.txt', 'w') as file:
+        file.write(str(0))
+        file.close()
+    
     with open('ded.txt', 'w') as file:
-    	file.write(str(count))
-    	file.close()
+        file.write(str(0))
+        file.close()
+
+    with open('used.txt', 'w') as file:
+        file.write(str('d'))
+        file.close()
 
     bot.send_message(message.chat.id, f"Я `бот`. *Приятно* _познакомиться_ ", parse_mode= 'Markdown', reply_markup=keyboard())
     bot.send_photo(message.chat.id, 'https://upload.wikimedia.org/wikipedia/commons/3/36/Retivow.jpg')
@@ -31,7 +34,7 @@ def get_messages(message):
     
     chat_id = message.chat.id
     if message.text == 'Учиться📚' or message.text == 'Далее➡️':
-    	learning(chat_id)
+        learning(chat_id)
     elif message.text == 'Вернуться в меню💬' :
         menu(chat_id)
     elif message.text == 'Завершить игру⛔': 
@@ -40,14 +43,14 @@ def get_messages(message):
         playing(chat_id)
 
     elif message.text == 'Помощь🚑':
-    	help(chat_id)
+        help(chat_id)
 
     elif message.text == 'Следующий вопрос❓':
-    	playing(chat_id)
+        playing(chat_id)
 
 
     else:
-    	bot.send_message(chat_id, 'Неизвестная команда. Попробуйте попадать пальцами по клавишам.', parse_mode= 'Markdown', reply_markup=keyboard())
+        bot.send_message(chat_id, 'Неизвестная команда. Попробуйте попадать пальцами по клавишам.', parse_mode= 'Markdown', reply_markup=keyboard())
 
     #bot.send_message(chat_id, f"{ded}", parse_mode= 'Markdown', reply_markup=keyboard())
     
@@ -63,54 +66,98 @@ def query_handler(call1):
 
 def learning(chat_id):
     
-	
+    
     bot.send_message(chat_id, "Выберите созвездие:", parse_mode='HTML',reply_markup=answers())
 
 def menu(chat_id):
     bot.send_message(chat_id, "Начните сызнова." ,parse_mode='HTML',reply_markup=keyboard())
 
 def game_interrupted(chat_id):
-    with open('ded.txt', 'r') as file:
-    	count=int(file.read())
-    	file.close()
-    count=0
+    with open('res.txt', 'w') as file:
+            file.write(str(0))
+            file.close()
+    with open('used.txt', 'w') as file:
+            file.write(str('d'))
+            file.close()
     with open('ded.txt', 'w') as file:
-	    	file.write(str(count))
-	    	file.close()
-    bot.send_message(chat_id, "Вы позорно капитулировали. А ведь тест был проще простого!" ,parse_mode='HTML',reply_markup=keyboard())
+            file.write(str(0))
+            file.close()
+    bot.send_message(chat_id, "*Вы позорно капитулировали. А ведь тест был проще простого!*" ,parse_mode='Markdown',reply_markup=keyboard())
 
 def game_ended(chat_id):
-    with open('ded.txt', 'r') as file:
-    	count=int(file.read())
-    	file.close()
-    count=0
+    with open('res.txt', 'r') as file:
+            res=int(file.read())
+            file.close()
+    with open('res.txt', 'w') as file:
+            file.write(str(0))
+            file.close()
+    with open('used.txt', 'w') as file:
+            file.write(str('d'))
+            file.close()
     with open('ded.txt', 'w') as file:
-	    	file.write(str(count))
-	    	file.close()
-    bot.send_message(chat_id, "Игра завершена. Ваш результат:" ,parse_mode='HTML',reply_markup=keyboard())
+            file.write(str(0))
+            file.close()
+
+    res+=1
+    res%=11
+
+    bot.send_message(chat_id, f"Игра завершена. Ваш результат: {res}/10", parse_mode='HTML',reply_markup=keyboard())
+    if res==10:
+        text='*Блестящая работа, капитан! Так держать!*'
+    if res<=9 and res>=6:
+        text='*Неплохо, но и не хорошо*'
+    if res<=5:
+        text='*Ты куда смотришь, двоечник??*'
+
+
+    bot.send_message(chat_id, text, parse_mode='Markdown',reply_markup=keyboard())
+    with open('used.txt', 'w') as file:
+            file.write(str('d'))
+            file.close()
 
 def playing(chat_id):
     text = 'игра началась!'
 
     with open('ded.txt', 'r') as file:
-    	count=int(file.read())
-    	file.close()
+        count=int(file.read())
+        file.close()
+
+    with open('used.txt', 'r') as file:
+        used=str(file.read())
+        file.close()
+
     global answer
-    pic, answer, out = create_random()
-
-
-    bot.send_message(chat_id, 'Выберите верное название созвездия:', parse_mode='HTML', reply_markup=ans_key(answer,out))
-    bot.send_photo(chat_id, pic)
+    pic, answer, out, number_play = create_random()
+    while str(number_play) in used:
+        pic, answer, out, number_play = create_random()
+        if str(number_play) not in used:
+            bot.send_message(chat_id, answer, parse_mode='HTML')
+            break
+        else:
+            continue
+        bot.send_message(chat_id, answer, parse_mode='HTML')
 
     count+=1
-
-
-    if count==11:
-    	game_ended(chat_id)
+    
+    if count==10:
+        game_ended(chat_id)
+        exit()
     else:
-	    with open('ded.txt', 'w') as file:
-	    	file.write(str(count))
-	    	file.close()
+        with open('ded.txt', 'w') as file:
+            file.write(str(count))
+            file.close()
+
+    bot.send_message(chat_id, 'Назовите созвездие на рисунке:', parse_mode='HTML', reply_markup=ans_key(answer,out))
+    bot.send_photo(chat_id, pic)
+
+    
+    
+    used+=str(number_play)
+    with open('used.txt', 'w') as file:
+        file.write(used)
+        file.close()
+
+    
 
 
 
@@ -135,9 +182,16 @@ def key_call(call):
     bot.answer_callback_query(callback_query_id=call.id, text='Ответ принят')
     #bot.send_message(call.message.chat.id, f"{answer}, {call.data[1:]}", parse_mode='HTML',reply_markup=keyboard1())
     if int(call.data[1:]) == int(answer):
+        with open('res.txt', 'r') as file:
+            res=int(file.read())
+            file.close()
+        res+=1
+        with open('res.txt', 'w') as file:
+            file.write(str(res))
+            file.close()
         bot.send_message(call.message.chat.id, '*Ваш ответ верный!*✅', parse_mode='Markdown',reply_markup=keyboard1())
     else:
-    	bot.send_message(call.message.chat.id, '*Ваш ответ неверный*❌', parse_mode='Markdown',reply_markup=keyboard1())
+        bot.send_message(call.message.chat.id, '*Ваш ответ неверный*❌', parse_mode='Markdown',reply_markup=keyboard1())
 
 def ans_key(answer, out):
     markup = telebot.types.InlineKeyboardMarkup()

@@ -59,13 +59,10 @@ def create_random():
 	answer=out.index(answer2)
 
 
-	return pic, answer, out
-
+	return pic, answer, out, number_play
+'''
 for i in range(10):
 	print(create_random())
 	print('\n\n')
-
-'''
-finally:
-	os.system('pause')
+os.system('pause')
 '''
