@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import telebot
 from telebot import types
 from game import play, create_random, description
@@ -21,7 +23,7 @@ def send_welcome(message):
         file.write(str('d'))
         file.close()
 
-    bot.send_message(message.chat.id, f"Привет! Давай начинать! Жми на 'Помощь!'", parse_mode= 'Markdown', reply_markup=keyboard())
+    bot.send_message(message.chat.id, f"Привет! Давай начинать! Жми на _Помощь!_", parse_mode= 'Markdown', reply_markup=keyboard())
     #bot.send_photo(message.chat.id, 'https://upload.wikimedia.org/wikipedia/commons/3/36/Retivow.jpg')
 
 @bot.message_handler(commands=['learn'])
