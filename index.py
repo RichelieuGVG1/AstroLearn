@@ -21,8 +21,8 @@ def send_welcome(message):
         file.write(str('d'))
         file.close()
 
-    bot.send_message(message.chat.id, f"Я `бот`. *Приятно* _познакомиться_ ", parse_mode= 'Markdown', reply_markup=keyboard())
-    bot.send_photo(message.chat.id, 'https://upload.wikimedia.org/wikipedia/commons/3/36/Retivow.jpg')
+    bot.send_message(message.chat.id, f"Привет! Давай начинать! Жми на 'Помощь!'", parse_mode= 'Markdown', reply_markup=keyboard())
+    #bot.send_photo(message.chat.id, 'https://upload.wikimedia.org/wikipedia/commons/3/36/Retivow.jpg')
 
 @bot.message_handler(commands=['learn'])
 def send_welcome(message):
