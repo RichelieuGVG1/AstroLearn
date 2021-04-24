@@ -1,6 +1,6 @@
 import telebot
 from telebot import types
-from game import play, create_random
+from game import play, create_random, description
 import random
 from lenin import lenin
 
@@ -33,7 +33,12 @@ def send_welcome(message):
 def get_messages(message):  
     
     chat_id = message.chat.id
-    if message.text == 'Учиться📚' or message.text == 'Далее➡️':
+    if message.text == 'Учиться📚': 
+        learning(chat_id)
+    elif message.text == 'Далее➡️':
+        bot.delete_message(chat_id, message.message_id-1)
+        bot.delete_message(chat_id, message.message_id-2)
+        bot.delete_message(chat_id, message.message_id-3)
         learning(chat_id)
     elif message.text == 'Вернуться в меню💬' :
         menu(chat_id)
@@ -177,8 +182,11 @@ def printed(call1):
     bot.answer_callback_query(callback_query_id=call1.id, text='Материал изучен')
     data=play()
     out=data[int(call1.data)]
+
+    des=description()
+    out1=des[int(call1.data)]
     bot.send_photo(call1.message.chat.id, out[0])
-    bot.send_message(call1.message.chat.id, out[1], parse_mode='Markdown', reply_markup=k2())
+    bot.send_message(call1.message.chat.id, out1[0], parse_mode='Markdown', reply_markup=k2())
 
 #changed here
 
