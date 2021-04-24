@@ -23,7 +23,7 @@ def send_welcome(message):
         file.write(str('d'))
         file.close()
 
-    bot.send_message(message.chat.id, f"Привет! Давай начинать! Жми на _Помощь!_", parse_mode= 'Markdown', reply_markup=keyboard())
+    bot.send_message(message.chat.id, f"Привет, *{message.from_user.first_name} {message.from_user.last_name}*! Давай начинать! Жми на _Помощь!_", parse_mode= 'Markdown', reply_markup=keyboard())
     #bot.send_photo(message.chat.id, 'https://upload.wikimedia.org/wikipedia/commons/3/36/Retivow.jpg')
 
 @bot.message_handler(commands=['learn'])
@@ -196,17 +196,23 @@ def printed(call1):
 def key_call(call):
     #bot.answer_callback_query(callback_query_id=call.id, text='Ответ принят')
     #bot.send_message(call.message.chat.id, f"{answer}, {call.data[1:]}", parse_mode='HTML',reply_markup=keyboard1())
-    if int(call.data[1:]) == int(answer):
-        with open('res.txt', 'r') as file:
-            res=int(file.read())
-            file.close()
-        res+=1
-        with open('res.txt', 'w') as file:
-            file.write(str(res))
-            file.close()
-        bot.send_message(call.message.chat.id, '*Ваш ответ верный!*✅', parse_mode='Markdown',reply_markup=keyboard1())
+    with open('used.txt', 'r') as f:
+        check=str(f.read())
+        f.close()
+    if check=='d':
+        pass
     else:
-        bot.send_message(call.message.chat.id, '*Ваш ответ неверный*❌', parse_mode='Markdown',reply_markup=keyboard1())
+        if int(call.data[1:]) == int(answer):
+            with open('res.txt', 'r') as file:
+                res=int(file.read())
+                file.close()
+            res+=1
+            with open('res.txt', 'w') as file:
+                file.write(str(res))
+                file.close()
+            bot.send_message(call.message.chat.id, '*Ваш ответ верный!*✅', parse_mode='Markdown',reply_markup=keyboard1())
+        else:
+            bot.send_message(call.message.chat.id, '*Ваш ответ неверный*❌', parse_mode='Markdown',reply_markup=keyboard1())
 
 def ans_key(answer, out):
     markup = telebot.types.InlineKeyboardMarkup()
