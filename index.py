@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 from game import play, create_random
 import random
-
+from lenin import lenin
 
 
 bot = telebot.TeleBot('1736780989:AAHppwjEPVMt-X4icSQOsm-zxxGOkcQyvUE')
@@ -48,6 +48,9 @@ def get_messages(message):
     elif message.text == 'Следующий вопрос❓':
         playing(chat_id)
 
+    elif message.text == 'Цитаты В. И. Ленина✯':
+        lenin_message(chat_id)
+
 
     else:
         bot.send_message(chat_id, 'Неизвестная команда. Попробуйте попадать пальцами по клавишам.', parse_mode= 'Markdown', reply_markup=keyboard())
@@ -66,8 +69,10 @@ def query_handler(call1):
 
 def learning(chat_id):
     
-    
     bot.send_message(chat_id, "Выберите созвездие:", parse_mode='HTML',reply_markup=answers())
+
+def lenin_message(chat_id):
+    bot.send_message(chat_id, lenin() ,parse_mode='Markdown',reply_markup=keyboard())
 
 def menu(chat_id):
     bot.send_message(chat_id, "Начните сызнова." ,parse_mode='HTML',reply_markup=keyboard())
@@ -175,7 +180,7 @@ def printed(call1):
     bot.send_photo(call1.message.chat.id, out[0])
     bot.send_message(call1.message.chat.id, out[1], parse_mode='Markdown', reply_markup=k2())
 
-
+#changed here
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('t'))
 def key_call(call):
@@ -207,10 +212,12 @@ def keyboard():
     btn0 = types.KeyboardButton("Помощь🚑")
     btn1 = types.KeyboardButton('Учиться📚')
     btn2 = types.KeyboardButton('Сдать тест🖊️')
+    btn3 = types.KeyboardButton('Цитаты В. И. Ленина✯')
 
     markup.add(btn0)
     markup.add(btn1)
     markup.add(btn2)
+    markup.add(btn3)
     return markup  
 
 def keyboard1():
